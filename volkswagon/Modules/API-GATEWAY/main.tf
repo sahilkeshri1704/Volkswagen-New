@@ -7,3 +7,5 @@ resource "google_api_gateway_gateway" "gateway" {
   api        = google_api_gateway_api.api.name
   region     = var.region
 }
+
+##

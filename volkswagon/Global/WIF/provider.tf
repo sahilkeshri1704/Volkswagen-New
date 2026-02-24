@@ -1,10 +1,12 @@
-provider "google" {
-  project = var.service_project_id
-  region  = var.region
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
+    }
+  }
 }
 
 provider "google" {
-  alias   = "host"
-  project = var.host_project_id
-  region  = var.region
+  project = var.project_id
 }

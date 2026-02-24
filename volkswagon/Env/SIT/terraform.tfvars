@@ -1,4 +1,5 @@
-env         = "sit"
-node_count  = 2
-machine_type = "e2-standard-4"
-enable_armor = true
+project_id      = "sit-project-id"
+region          = "us-central1"
+host_project_id = "host-project-id"
+network_name    = "shared-vpc"
+subnet_name     = "sit-subnet"

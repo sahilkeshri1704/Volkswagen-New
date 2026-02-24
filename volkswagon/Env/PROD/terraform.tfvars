@@ -1,4 +1,5 @@
-env         = "prod"
-node_count  = 3
-machine_type = "e2-standard-4"
-enable_armor = true
+project_id      = "prod-project-id"
+region          = "us-central1"
+host_project_id = "host-project-id"
+network_name    = "shared-vpc"
+subnet_name     = "prod-subnet"

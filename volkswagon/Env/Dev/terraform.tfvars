@@ -1,4 +1,5 @@
-env         = "dev"
-node_count  = 1
-machine_type = "e2-standard-2"
-enable_armor = false
+project_id      = "dev-project-id"
+region          = "us-central1"
+host_project_id = "host-project-id"
+network_name    = "shared-vpc"
+subnet_name     = "dev-subnet"

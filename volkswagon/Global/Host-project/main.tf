@@ -1,40 +1,37 @@
-
-module "vpc" {
-  source       = "../../modules/vpc"
-  network_name = var.network_name
+resource "google_compute_subnetwork" "dev" {
+  name          = "dev-subnet"
+  ip_cidr_range = "10.10.0.0/24"
+  region        = var.region
+  network       = google_compute_network.vpc.id
+  private_ip_google_access = true
 }
 
-module "subnet_dev" {
-  source       = "../../modules/subnet"
-  network      = module.vpc.network_id
-  subnet_name  = "dev-subnet"
-  region       = var.region
-  cidr         = "10.10.0.0/24"
+resource "google_compute_subnetwork" "sit" {
+  name          = "sit-subnet"
+  ip_cidr_range = "10.20.0.0/24"
+  region        = var.region
+  network       = google_compute_network.vpc.id
+  private_ip_google_access = true
 }
 
-module "subnet_sit" {
-  source       = "../../modules/subnet"
-  network      = module.vpc.network_id
-  subnet_name  = "sit-subnet"
-  region       = var.region
-  cidr         = "10.20.0.0/24"
+resource "google_compute_subnetwork" "prod" {
+  name          = "prod-subnet"
+  ip_cidr_range = "10.30.0.0/24"
+  region        = var.region
+  network       = google_compute_network.vpc.id
+  private_ip_google_access = true
 }
 
-module "subnet_prod" {
-  source       = "../../modules/subnet"
-  network      = module.vpc.network_id
-  subnet_name  = "prod-subnet"
-  region       = var.region
-  cidr         = "10.30.0.0/24"
-}
-
-module "nat" {
-  source  = "../../modules/nat"
-  network = module.vpc.network_id
+resource "google_compute_router" "nat_router" {
+  name    = "nat-router"
   region  = var.region
+  network = google_compute_network.vpc.id
 }
 
-module "firewall" {
-  source  = "../../modules/firewall"
-  network = module.vpc.network_id
+resource "google_compute_router_nat" "nat" {
+  name                               = "nat-config"
+  router                             = google_compute_router.nat_router.name
+  region                             = var.region
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
 }
