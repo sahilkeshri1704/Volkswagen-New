@@ -1,0 +1,54 @@
+name: Dev Terraform Deploy
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    env:
+      PROJECT_ID: dev-project-id
+      REGION: us-central1
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Authenticate to GCP using WIF
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER_DEV }}
+          service_account: ${{ secrets.SA_EMAIL_DEV }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: |
+          cd environments/dev
+          terraform init
+
+      - name: Terraform Validate
+        run: |
+          cd environments/dev
+          terraform validate
+
+      - name: Terraform Plan
+        run: |
+          cd environments/dev
+          terraform plan
+
+      - name: Terraform Apply
+        run: |
+          cd environments/dev
+          terraform apply -auto-approve
